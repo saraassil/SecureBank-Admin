@@ -20,7 +20,11 @@ function AppRoutes() {
         <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/analyses" element={<AnalysesPage />} />
         <Route path="/documents" element={<DocumentsPage />} />
+
+        {/* PARAMÈTRES */}
         <Route path="/settings" element={<SettingsPage />} />
+
+        {/* PROFIL */}
         <Route path="/profile" element={<ProfileAdmin />} />
       </Routes>
     </BrowserRouter>

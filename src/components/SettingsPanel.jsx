@@ -5,8 +5,6 @@ import {
   Switch,
   Divider,
   Button,
-  TextField,
-  Grid,
 } from "@mui/material";
 
 function SettingsPanel() {
@@ -14,7 +12,7 @@ function SettingsPanel() {
     background: "rgba(255,255,255,.03)",
     border: "1px solid rgba(255,255,255,.08)",
     borderRadius: "24px",
-    transition: "all .3s ease-in-out",
+    transition: "all 0.3s ease-in-out",
     p: 4,
     mb: 4,
 
@@ -41,33 +39,6 @@ function SettingsPanel() {
     },
   };
 
-  const textFieldStyle = {
-    "& .MuiOutlinedInput-root": {
-      color: "#fff",
-      borderRadius: "16px",
-
-      "& fieldset": {
-        borderColor: "rgba(255,255,255,.08)",
-      },
-
-      "&:hover fieldset": {
-        borderColor: "#8B5CF6",
-      },
-
-      "&.Mui-focused fieldset": {
-        borderColor: "#8B5CF6",
-      },
-    },
-
-    "& .MuiInputLabel-root": {
-      color: "#94A3B8",
-    },
-
-    "& .MuiInputLabel-root.Mui-focused": {
-      color: "#38BDF8",
-    },
-  };
-
   return (
     <Box sx={{ mt: 3 }}>
       <Typography
@@ -87,7 +58,7 @@ function SettingsPanel() {
           mb: 5,
         }}
       >
-        Gérez la configuration et la sécurité de SecureBank AI.
+        Gérez les paramètres de votre compte administrateur et de sécurité.
       </Typography>
 
       {/* Sécurité */}
@@ -113,7 +84,7 @@ function SettingsPanel() {
           </Button>
         </Box>
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.05)" }} />
 
         <Box sx={settingItem}>
           <Typography sx={{ color: "#E2E8F0" }}>
@@ -122,29 +93,9 @@ function SettingsPanel() {
 
           <Switch defaultChecked sx={switchStyle} />
         </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Historique des connexions
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Gestion des sessions
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
       </Paper>
 
-      {/* Notifications */}
+      {/* Préférences */}
 
       <Paper elevation={0} sx={cardStyle}>
         <Typography
@@ -154,7 +105,7 @@ function SettingsPanel() {
             mb: 2,
           }}
         >
-          Notifications
+          Préférences
         </Typography>
 
         <Box sx={settingItem}>
@@ -165,7 +116,7 @@ function SettingsPanel() {
           <Switch defaultChecked sx={switchStyle} />
         </Box>
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.05)" }} />
 
         <Box sx={settingItem}>
           <Typography sx={{ color: "#E2E8F0" }}>
@@ -174,144 +125,11 @@ function SettingsPanel() {
 
           <Switch sx={switchStyle} />
         </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Alertes fraude critiques
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Rapports automatiques
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
-      </Paper>
-
-      {/* IA */}
-
-      <Paper elevation={0} sx={cardStyle}>
-        <Typography
-          sx={{
-            color: "#38BDF8",
-            fontWeight: 700,
-            mb: 2,
-          }}
-        >
-          IA & Détection
-        </Typography>
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Analyse IA
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={settingItem}>
-          <Typography sx={{ color: "#E2E8F0" }}>
-            Détection en temps réel
-          </Typography>
-
-          <Switch defaultChecked sx={switchStyle} />
-        </Box>
-
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
-
-        <Box sx={{ py: 2 }}>
-          <Typography
-            sx={{
-              color: "#94A3B8",
-              mb: 1,
-            }}
-          >
-            Précision actuelle du modèle
-          </Typography>
-
-          <Typography
-            sx={{
-              color: "#22C55E",
-              fontSize: 32,
-              fontWeight: 700,
-            }}
-          >
-            98.7%
-          </Typography>
-        </Box>
-      </Paper>
-
-      {/* Système */}
-
-      <Paper elevation={0} sx={cardStyle}>
-        <Typography
-          sx={{
-            color: "#38BDF8",
-            fontWeight: 700,
-            mb: 3,
-          }}
-        >
-          Système
-        </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Nom de la plateforme"
-              defaultValue="SecureBank AI"
-              sx={textFieldStyle}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Email administrateur"
-              defaultValue="admin@securebank.ai"
-              sx={textFieldStyle}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Langue"
-              defaultValue="Français"
-              sx={textFieldStyle}
-            />
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Fuseau horaire"
-              defaultValue="UTC+1"
-              sx={textFieldStyle}
-            />
-          </Grid>
-        </Grid>
       </Paper>
 
       {/* Confidentialité */}
 
-      <Paper
-        elevation={0}
-        sx={{
-          ...cardStyle,
-          border: "1px solid rgba(139,92,246,.4)",
-        }}
-      >
+      <Paper elevation={0} sx={cardStyle}>
         <Typography
           sx={{
             color: "#38BDF8",
@@ -332,7 +150,7 @@ function SettingsPanel() {
           </Button>
         </Box>
 
-        <Divider sx={{ borderColor: "rgba(255,255,255,.05)" }} />
+        <Divider sx={{ borderColor: "rgba(255,255,255,0.05)" }} />
 
         <Box sx={settingItem}>
           <Typography sx={{ color: "#EF4444" }}>

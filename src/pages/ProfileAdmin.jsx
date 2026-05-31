@@ -60,7 +60,7 @@ const ProfileAdmin = () => {
     },
 
     "& .MuiInputLabel-root": {
-      color: "#CBD5E1",
+      color: "#FFFFFF",
     },
 
     "& .MuiInputLabel-root.Mui-focused": {
@@ -68,7 +68,7 @@ const ProfileAdmin = () => {
     },
 
     "& .MuiFormLabel-root": {
-      color: "#CBD5E1",
+      color: "#FFFFFF",
     },
   };
 
@@ -77,7 +77,8 @@ const ProfileAdmin = () => {
       sx={{
         minHeight: "100vh",
         display: "flex",
-        background: "linear-gradient(180deg,#020617 0%, #040816 100%)",
+        background:
+          "linear-gradient(180deg,#020617 0%, #040816 100%)",
       }}
     >
       <AdminSidebar />
@@ -97,7 +98,7 @@ const ProfileAdmin = () => {
         >
           <Typography
             sx={{
-              color: "#fff",
+              color: "#FFFFFF",
               fontSize: 42,
               fontWeight: 700,
               mb: 1,
@@ -115,6 +116,7 @@ const ProfileAdmin = () => {
             Gérez vos informations personnelles et votre compte administrateur.
           </Typography>
 
+          {/* Carte Profil */}
           <Paper
             elevation={0}
             sx={{
@@ -138,7 +140,8 @@ const ProfileAdmin = () => {
                     height: 110,
                     fontSize: 42,
                     fontWeight: 700,
-                    background: "linear-gradient(135deg,#5B21B6,#8B5CF6)",
+                    background:
+                      "linear-gradient(135deg,#5B21B6,#8B5CF6)",
                   }}
                 >
                   {adminData.initial}
@@ -164,8 +167,8 @@ const ProfileAdmin = () => {
               <Box>
                 <Typography
                   sx={{
-                    color: "#fff",
-                    fontSize: 28,
+                    color: "#FFFFFF",
+                    fontSize: 30,
                     fontWeight: 700,
                   }}
                 >
@@ -176,6 +179,7 @@ const ProfileAdmin = () => {
                   sx={{
                     color: "#8B5CF6",
                     fontWeight: 600,
+                    fontSize: 22,
                     mt: 1,
                   }}
                 >
@@ -194,12 +198,33 @@ const ProfileAdmin = () => {
             </Box>
           </Paper>
 
+          {/* Cartes statistiques */}
           <Grid container spacing={3} sx={{ mb: 4 }}>
             <Grid item xs={12} md={4}>
-              <Paper elevation={0} sx={{ ...cardStyle, p: 3 }}>
-                <Typography color="#FFFFFF">Utilisateurs</Typography>
+              <Paper
+                elevation={0}
+                sx={{
+                  ...cardStyle,
+                  p: 3,
+                }}
+              >
                 <Typography
-                  sx={{ color: "#ffffff", fontSize: 30, fontWeight: 700 }}
+                  sx={{
+                    color: "#FFFFFF",
+                    fontSize: 18,
+                    fontWeight: 600,
+                    mb: 1,
+                  }}
+                >
+                  Utilisateurs
+                </Typography>
+
+                <Typography
+                  sx={{
+                    color: "#FFFFFF",
+                    fontSize: 34,
+                    fontWeight: 700,
+                  }}
                 >
                   2 548
                 </Typography>
@@ -207,10 +232,30 @@ const ProfileAdmin = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Paper elevation={0} sx={{ ...cardStyle, p: 3 }}>
-                <Typography color="#FFFFFF">Analyses IA</Typography>
+              <Paper
+                elevation={0}
+                sx={{
+                  ...cardStyle,
+                  p: 3,
+                }}
+              >
                 <Typography
-                  sx={{ color: "#fff", fontSize: 30, fontWeight: 700 }}
+                  sx={{
+                    color: "#ffffff",
+                    fontSize: 18,
+                    fontWeight: 600,
+                    mb: 1,
+                  }}
+                >
+                  Analyses IA
+                </Typography>
+
+                <Typography
+                  sx={{
+                    color: "#ffffff",
+                    fontSize: 34,
+                    fontWeight: 700,
+                  }}
                 >
                   15 248
                 </Typography>
@@ -218,10 +263,30 @@ const ProfileAdmin = () => {
             </Grid>
 
             <Grid item xs={12} md={4}>
-              <Paper elevation={0} sx={{ ...cardStyle, p: 3 }}>
-                <Typography color="#FFFFFF">Alertes Fraude</Typography>
+              <Paper
+                elevation={0}
+                sx={{
+                  ...cardStyle,
+                  p: 3,
+                }}
+              >
                 <Typography
-                  sx={{ color: "#EF4444", fontSize: 30, fontWeight: 700 }}
+                  sx={{
+                    color: "#ffffff",
+                    fontSize: 18,
+                    fontWeight: 600,
+                    mb: 1,
+                  }}
+                >
+                  Alertes Fraude
+                </Typography>
+
+                <Typography
+                  sx={{
+                    color: "#EF4444",
+                    fontSize: 34,
+                    fontWeight: 700,
+                  }}
                 >
                   124
                 </Typography>
@@ -229,15 +294,30 @@ const ProfileAdmin = () => {
             </Grid>
           </Grid>
 
-          <Paper elevation={0} sx={{ ...cardStyle, p: 4 }}>
+          {/* Informations personnelles */}
+          <Paper
+            elevation={0}
+            sx={{
+              ...cardStyle,
+              p: 4,
+            }}
+          >
             <Typography
-              sx={{ color: "#38BDF8", fontWeight: 700, mb: 3 }}
+              sx={{
+                color: "#38BDF8",
+                fontWeight: 700,
+                fontSize: 24,
+                mb: 3,
+              }}
             >
               Informations personnelles
             </Typography>
 
             <Divider
-              sx={{ borderColor: "rgba(255,255,255,.08)", mb: 4 }}
+              sx={{
+                borderColor: "rgba(255,255,255,.08)",
+                mb: 4,
+              }}
             />
 
             <Grid container spacing={3}>
@@ -292,14 +372,17 @@ const ProfileAdmin = () => {
               <Button
                 variant="contained"
                 sx={{
-                  background: "linear-gradient(135deg,#5B21B6,#8B5CF6)",
+                  background:
+                    "linear-gradient(135deg,#5B21B6,#8B5CF6)",
                   px: 4,
                   py: 1.5,
                   borderRadius: "12px",
                   textTransform: "none",
                   fontWeight: 700,
+
                   "&:hover": {
-                    background: "linear-gradient(135deg,#6D28D9,#A855F7)",
+                    background:
+                      "linear-gradient(135deg,#6D28D9,#A855F7)",
                   },
                 }}
               >
