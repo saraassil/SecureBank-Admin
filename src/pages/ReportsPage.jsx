@@ -1,0 +1,40 @@
+import { Box } from "@mui/material";
+
+import AdminSidebar from "../components/AdminSidebar";
+import AdminHeader from "../components/AdminHeader";
+import ReportsTable from "../components/ReportsTable";
+import AdminFooter from "../components/AdminFooter";
+
+function ReportsPage() {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        minHeight: "100vh",
+        background:
+          "linear-gradient(135deg,#020617 0%, #030B3D 100%)",
+      }}
+    >
+      <AdminSidebar />
+
+      <Box
+        sx={{
+          flex: 1,
+          p: 4,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <AdminHeader />
+
+        <Box sx={{ flex: 1 }}>
+          <ReportsTable />
+        </Box>
+
+        <AdminFooter />
+      </Box>
+    </Box>
+  );
+}
+
+export default ReportsPage;
