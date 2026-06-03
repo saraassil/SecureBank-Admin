@@ -21,10 +21,16 @@ function DocumentsPage() {
         sx={{
           flex: 1,
           p: 4,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <AdminHeader />
-        <DocumentsTable />
+
+        <Box sx={{ mt: 3 }}>
+          <DocumentsTable />
+        </Box>
+
         <AdminFooter />
       </Box>
     </Box>
