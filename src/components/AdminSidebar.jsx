@@ -24,42 +24,42 @@ function AdminSidebar() {
   const menuItems = [
     {
       label: "Dashboard",
-      path: "/dashboard",
+      path: "/admin",
       icon: <DashboardOutlinedIcon />,
     },
     {
       label: "Utilisateurs",
-      path: "/users",
+      path: "/admin/users",
       icon: <GroupOutlinedIcon />,
     },
     {
       label: "Alertes Fraude",
-      path: "/alerts",
+      path: "/admin/alerts",
       icon: <WarningAmberOutlinedIcon />,
     },
     {
       label: "Analyses",
-      path: "/analyses",
+      path: "/admin/analyses",
       icon: <QueryStatsOutlinedIcon />,
     },
     {
       label: "Documents",
-      path: "/documents",
+      path: "/admin/documents",
       icon: <DescriptionOutlinedIcon />,
     },
     {
       label: "Rapports",
-      path: "/reports",
+      path: "/admin/reports",
       icon: <AssessmentOutlinedIcon />,
     },
     {
       label: "Paramètres",
-      path: "/settings",
+      path: "/admin/settings",
       icon: <SettingsOutlinedIcon />,
     },
     {
       label: "Profil",
-      path: "/profile",
+      path: "/admin/profile",
       icon: <PersonOutlineOutlinedIcon />,
     },
   ];

@@ -1,5 +1,19 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import LandingPage from "../pages/LandingPage";
+import Login from "../pages/Auth/Login";
+import Loginadmin from "../pages/Auth/Loginadmin";
+import AboutUs from "../pages/AboutUs";
+import ContactUs from "../pages/ContactUs";
+import Signup from "../pages/Auth/signup";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Documents from "../components/documents/Documents";
+import Analyses from "../pages/Analysis/analyses";
+import Historique from "../components/reports/historique";
+import Notifications from "../components/Notifications/notifications";
+import Profile from "../components/Profile/profile";
+import Parametres from "../components/Parametres/parametres";
+
 import AdminDashboard from "../pages/AdminDashboard";
 import UsersPage from "../pages/UsersPage";
 import ReportsPage from "../pages/ReportsPage";
@@ -13,19 +27,29 @@ function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<AdminDashboard />} />
-        <Route path="/dashboard" element={<AdminDashboard />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/reports" element={<ReportsPage />} />
-        <Route path="/alerts" element={<AlertsPage />} />
-        <Route path="/analyses" element={<AnalysesPage />} />
-        <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/loginadmin" element={<Loginadmin />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/contact" element={<ContactUs />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/analyses" element={<Analyses />} />
+        <Route path="/historique" element={<Historique />} />
+        <Route path="/notifications" element={<Notifications />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/parametres" element={<Parametres />} />
 
-        {/* PARAMÈTRES */}
-        <Route path="/settings" element={<SettingsPage />} />
-
-        {/* PROFIL */}
-        <Route path="/profile" element={<ProfileAdmin />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/users" element={<UsersPage />} />
+        <Route path="/admin/reports" element={<ReportsPage />} />
+        <Route path="/admin/alerts" element={<AlertsPage />} />
+        <Route path="/admin/analyses" element={<AnalysesPage />} />
+        <Route path="/admin/documents" element={<DocumentsPage />} />
+        <Route path="/admin/settings" element={<SettingsPage />} />
+        <Route path="/admin/profile" element={<ProfileAdmin />} />
       </Routes>
     </BrowserRouter>
   );

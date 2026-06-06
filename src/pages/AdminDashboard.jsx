@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 
 import AdminSidebar from "../components/AdminSidebar";
@@ -8,6 +9,14 @@ import RiskStats from "../components/RiskStats";
 import AdminFooter from "../components/AdminFooter";
 
 function AdminDashboard() {
+  const [stats, setStats] = useState(null);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/admin/stats")
+      .then((r) => r.json())
+      .then(setStats)
+      .catch(() => {});
+  }, []);
   return (
     <Box
       sx={{
@@ -36,7 +45,7 @@ function AdminDashboard() {
       >
         <AdminHeader />
 
-        <AdminStats />
+        <AdminStats stats={stats} />
 
         <Box sx={{ mt: 4 }}>
           <AdminCharts />

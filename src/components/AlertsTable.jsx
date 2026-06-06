@@ -1,174 +1,72 @@
 import {
-  Paper,
-  Typography,
-  Box,
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Chip,
-  IconButton,
+  Paper, Typography, Box, Button, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, Chip, IconButton,
+  Dialog, DialogTitle, DialogContent, DialogActions, Snackbar, Alert,
 } from "@mui/material";
-
+import { useState, useEffect } from "react";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import FilterListOutlinedIcon from "@mui/icons-material/FilterListOutlined";
 
-const alerts = [
-  {
-    id: "ALR-001",
-    user: "Ahmed Ben Ali",
-    type: "Document bancaire",
-    risk: "Élevé",
-    date: "22/05/2024 14:32",
-    status: "Nouveau",
-  },
-  {
-    id: "ALR-002",
-    user: "Fatima Zahra",
-    type: "Activité inhabituelle",
-    risk: "Moyen",
-    date: "22/05/2024 13:15",
-    status: "En cours",
-  },
-  {
-    id: "ALR-003",
-    user: "Karim Meddeb",
-    type: "Carte suspecte",
-    risk: "Élevé",
-    date: "22/05/2024 11:02",
-    status: "Nouveau",
-  },
-  {
-    id: "ALR-004",
-    user: "Salma Trabelsi",
-    type: "Multiple connexions",
-    risk: "Moyen",
-    date: "21/05/2024 22:47",
-    status: "En cours",
-  },
-  {
-    id: "ALR-005",
-    user: "Youssef Hajji",
-    type: "Virement suspect",
-    risk: "Faible",
-    date: "21/05/2024 18:05",
-    status: "Traitée",
-  },
-];
+const API = "http://localhost:5000";
+const PAGE_SIZE = 8;
 
 function AlertsTable() {
+  const [alerts, setAlerts] = useState([]);
+  const [filter, setFilter] = useState("all");
+  const [page, setPage] = useState(0);
+  const [viewAlert, setViewAlert] = useState(null);
+  const [snack, setSnack] = useState({ open: false, msg: "", severity: "success" });
+
+  const fetchAlerts = () => {
+    fetch(`${API}/admin/alerts`)
+      .then((r) => r.json())
+      .then(setAlerts)
+      .catch(() => {});
+  };
+
+  useEffect(() => { fetchAlerts(); }, []);
+
+  const riskLevel = (prob) => {
+    if (prob >= 0.7) return { label: "Critique", color: "#7F1D1D" };
+    if (prob >= 0.4) return { label: "Élevé", color: "#991B1B" };
+    return { label: "Moyen", color: "#78350F" };
+  };
+
+  const filtered = filter === "all" ? alerts : alerts.filter((a) => riskLevel(a.fraud_probability).label === filter);
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+
+  const handleResolve = async (id) => {
+    try {
+      const r = await fetch(`${API}/admin/alerts/${id}/resolve`, { method: "POST" });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error || "Erreur");
+      setSnack({ open: true, msg: "Alerte résolue", severity: "success" });
+      fetchAlerts();
+    } catch (e) {
+      setSnack({ open: true, msg: e.message, severity: "error" });
+    }
+  };
+
   return (
-    <Paper
-      sx={{
-        background: "#07122B",
-        borderRadius: "24px",
-        p: 4,
-        border: "1px solid rgba(255,255,255,0.08)",
-      }}
-    >
-      <Typography
-        sx={{
-          color: "#fff",
-          fontSize: 34,
-          fontWeight: 700,
-        }}
-      >
-        Alertes fraude
-      </Typography>
+    <Paper sx={{ background: "#07122B", borderRadius: "24px", p: 4, border: "1px solid rgba(255,255,255,0.08)" }}>
+      <Typography sx={{ color: "#fff", fontSize: 34, fontWeight: 700 }}>Alertes fraude</Typography>
+      <Typography sx={{ color: "#94A3B8", mt: 1 }}>Liste des activités suspectes détectées</Typography>
+      <Typography sx={{ color: "#8B5CF6", fontWeight: 600, mt: 1, mb: 4 }}>{alerts.length} alertes détectées</Typography>
 
-      <Typography
-        sx={{
-          color: "#94A3B8",
-          mt: 1,
-        }}
-      >
-        Liste des activités suspectes détectées
-      </Typography>
-
-      <Typography
-        sx={{
-          color: "#8B5CF6",
-          fontWeight: 600,
-          mt: 1,
-          mb: 4,
-        }}
-      >
-        142 alertes détectées
-      </Typography>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 4,
-          flexWrap: "wrap",
-          gap: 2,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 2,
-            flexWrap: "wrap",
-          }}
-        >
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: "30px",
-              background:
-                "linear-gradient(135deg,#7C3AED,#A855F7)",
-            }}
-          >
-            Tous
-          </Button>
-
-          <Button
-            sx={{
-              color: "#EF4444",
-              border: "1px solid #EF4444",
-              borderRadius: "30px",
-            }}
-          >
-            Risque élevé
-          </Button>
-
-          <Button
-            sx={{
-              color: "#F59E0B",
-              border: "1px solid #F59E0B",
-              borderRadius: "30px",
-            }}
-          >
-            Risque moyen
-          </Button>
-
-          <Button
-            sx={{
-              color: "#22C55E",
-              border: "1px solid #22C55E",
-              borderRadius: "30px",
-            }}
-          >
-            Risque faible
-          </Button>
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4, flexWrap: "wrap", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          {["all", "Critique", "Élevé", "Moyen"].map((f) => (
+            <Button key={f} onClick={() => { setFilter(f); setPage(0); }}
+              variant={filter === f ? "contained" : "outlined"}
+              sx={{ borderRadius: "30px", background: filter === f ? "linear-gradient(135deg,#7C3AED,#A855F7)" : "transparent",
+                color: filter === f ? "#fff" : "#94A3B8", border: "1px solid rgba(255,255,255,0.15)" }}>
+              {f === "all" ? "Tous" : f}
+            </Button>
+          ))}
         </Box>
-
-        <Button
-          startIcon={<FilterListOutlinedIcon />}
-          sx={{
-            color: "#fff",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "14px",
-          }}
-        >
-          Filtrer
-        </Button>
+        <Button startIcon={<FilterListOutlinedIcon />} sx={{ color: "#fff", border: "1px solid rgba(255,255,255,0.15)", borderRadius: "14px" }}>Filtrer</Button>
       </Box>
 
       <TableContainer>
@@ -180,119 +78,71 @@ function AlertsTable() {
               <TableCell sx={{ color: "#94A3B8" }}>Type</TableCell>
               <TableCell sx={{ color: "#94A3B8" }}>Risque</TableCell>
               <TableCell sx={{ color: "#94A3B8" }}>Date</TableCell>
-              <TableCell sx={{ color: "#94A3B8" }}>Statut</TableCell>
+              <TableCell sx={{ color: "#94A3B8" }}>Probabilité</TableCell>
               <TableCell sx={{ color: "#94A3B8" }}>Actions</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
-            {alerts.map((alert) => (
-              <TableRow
-                key={alert.id}
-                sx={{
-                  "&:hover": {
-                    background:
-                      "rgba(255,255,255,0.03)",
-                  },
-                }}
-              >
-                <TableCell sx={{ color: "#fff" }}>
-                  {alert.id}
-                </TableCell>
-
-                <TableCell sx={{ color: "#fff" }}>
-                  {alert.user}
-                </TableCell>
-
-                <TableCell sx={{ color: "#fff" }}>
-                  {alert.type}
-                </TableCell>
-
-                <TableCell>
-                  <Chip
-                    label={alert.risk}
-                    sx={{
-                      color: "#fff",
-                      background:
-                        alert.risk === "Élevé"
-                          ? "#7F1D1D"
-                          : alert.risk === "Moyen"
-                          ? "#78350F"
-                          : "#14532D",
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell sx={{ color: "#fff" }}>
-                  {alert.date}
-                </TableCell>
-
-                <TableCell>
-                  <Chip
-                    label={alert.status}
-                    sx={{
-                      color: "#fff",
-                      background:
-                        alert.status === "Nouveau"
-                          ? "#1D4ED8"
-                          : alert.status === "En cours"
-                          ? "#B45309"
-                          : "#15803D",
-                    }}
-                  />
-                </TableCell>
-
-                <TableCell>
-                  <IconButton>
-                    <VisibilityOutlinedIcon
-                      sx={{ color: "#3B82F6" }}
-                    />
-                  </IconButton>
-
-                  <IconButton>
-                    <EditOutlinedIcon
-                      sx={{ color: "#8B5CF6" }}
-                    />
-                  </IconButton>
-
-                  <IconButton>
-                    <DeleteOutlineOutlinedIcon
-                      sx={{ color: "#EF4444" }}
-                    />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
+            {paged.map((alert) => {
+              const risk = riskLevel(alert.fraud_probability);
+              return (
+                <TableRow key={alert.id} sx={{ "&:hover": { background: "rgba(255,255,255,0.03)" } }}>
+                  <TableCell sx={{ color: "#fff" }}>TXN-{String(alert.id).padStart(3, "0")}</TableCell>
+                  <TableCell sx={{ color: "#fff" }}>{alert.client_name}</TableCell>
+                  <TableCell sx={{ color: "#fff" }}>{alert.merchant_name}</TableCell>
+                  <TableCell><Chip label={risk.label} sx={{ color: "#fff", background: risk.color }} /></TableCell>
+                  <TableCell sx={{ color: "#fff" }}>{alert.date}</TableCell>
+                  <TableCell>
+                    <Chip label={`${(alert.fraud_probability * 100).toFixed(0)}%`} sx={{ color: "#fff", background: alert.fraud_probability >= 0.5 ? "#7F1D1D" : "#78350F" }} />
+                  </TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => setViewAlert(alert)}><VisibilityOutlinedIcon sx={{ color: "#3B82F6" }} /></IconButton>
+                    <IconButton onClick={() => handleResolve(alert.id)}><CheckCircleOutlineOutlinedIcon sx={{ color: "#22C55E" }} /></IconButton>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
 
-      <Box
-        sx={{
-          mt: 4,
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-        }}
-      >
-        {[1, 2, 3, 4, 5].map((page) => (
-          <Button
-            key={page}
-            variant={page === 1 ? "contained" : "outlined"}
-            sx={{
-              minWidth: "40px",
-              color: "#fff",
-              borderColor: "rgba(255,255,255,0.15)",
-              background:
-                page === 1
-                  ? "#3B82F6"
-                  : "transparent",
-            }}
-          >
-            {page}
+      {/* Pagination */}
+      <Box sx={{ mt: 4, display: "flex", justifyContent: "center", gap: 1 }}>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <Button key={i} onClick={() => setPage(i)}
+            variant={page === i ? "contained" : "outlined"}
+            sx={{ minWidth: "40px", color: "#fff", borderColor: "rgba(255,255,255,0.15)",
+              background: page === i ? "#3B82F6" : "transparent" }}>
+            {i + 1}
           </Button>
         ))}
       </Box>
+
+      {/* View Dialog */}
+      <Dialog open={!!viewAlert} onClose={() => setViewAlert(null)} slotProps={{ paper: { sx: { background: "#07122B", color: "#fff", borderRadius: "24px", minWidth: 400 } } }}>
+        <DialogTitle sx={{ color: "#fff", fontWeight: 700 }}>Détails de l'alerte</DialogTitle>
+        <DialogContent>
+          {viewAlert && (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              <Typography>ID: TXN-{String(viewAlert.id).padStart(3, "0")}</Typography>
+              <Typography>Client: {viewAlert.client_name}</Typography>
+              <Typography>Commerce: {viewAlert.merchant_name}</Typography>
+              <Typography>Montant: {viewAlert.amount} $</Typography>
+              <Typography>Date: {viewAlert.date}</Typography>
+              <Typography>Distance: {viewAlert.distance_km ? `${viewAlert.distance_km.toFixed(2)} km` : "-"}</Typography>
+              <Typography>Probabilité de fraude: {(viewAlert.fraud_probability * 100).toFixed(1)}%</Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setViewAlert(null)} sx={{ color: "#94A3B8" }}>Fermer</Button>
+          {viewAlert && <Button onClick={() => { handleResolve(viewAlert.id); setViewAlert(null); }} variant="contained" color="success">Résoudre</Button>}
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar open={snack.open} autoHideDuration={4000} onClose={() => setSnack({ ...snack, open: false })} anchorOrigin={{ vertical: "bottom", horizontal: "right" }}>
+        <Alert severity={snack.severity} variant="filled">{snack.msg}</Alert>
+      </Snackbar>
     </Paper>
   );
 }

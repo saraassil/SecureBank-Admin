@@ -87,45 +87,42 @@ function StatCard({
   );
 }
 
-function AdminStats() {
+function AdminStats({ stats }) {
   return (
     <Box sx={{ mt: 4 }}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <StatCard
             title="Utilisateurs"
-            value="1,248"
-            subtitle="+12.8% vs hier"
+            value={(stats?.total_clients + stats?.total_merchants || 0).toLocaleString()}
+            subtitle={`${stats?.total_clients || 0} clients, ${stats?.total_merchants || 0} commerçants`}
             color="#8B5CF6"
             icon={<GroupsOutlinedIcon sx={{ fontSize: 36 }} />}
           />
         </Grid>
-
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <StatCard
-            title="Analyses effectuées"
-            value="3,672"
-            subtitle="+18.5% vs hier"
+            title="Transactions"
+            value={(stats?.total_transactions || 0).toLocaleString()}
+            subtitle="Total des transactions"
             color="#3B82F6"
             icon={<TrendingUpOutlinedIcon sx={{ fontSize: 36 }} />}
           />
         </Grid>
-
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <StatCard
             title="Alertes fraude"
-            value="142"
-            subtitle="+21.1% vs hier"
+            value={(stats?.fraud_transactions || 0).toLocaleString()}
+            subtitle="Transactions frauduleuses"
             color="#EF4444"
             icon={<WarningAmberOutlinedIcon sx={{ fontSize: 36 }} />}
           />
         </Grid>
-
-        <Grid item xs={12} md={3}>
+        <Grid size={{ xs: 12, md: 3 }}>
           <StatCard
             title="Taux de fraude"
-            value="3.86%"
-            subtitle="-1.2% vs hier"
+            value={`${stats?.fraud_rate || 0}%`}
+            subtitle="Ratio de fraude"
             color="#22C55E"
             icon={<SecurityOutlinedIcon sx={{ fontSize: 36 }} />}
           />

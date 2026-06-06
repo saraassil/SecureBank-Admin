@@ -1,54 +1,38 @@
+import { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 
 function RiskStats() {
+  const [riskData, setRiskData] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/admin/charts")
+      .then((r) => r.json())
+      .then((d) => setRiskData(d.risk_data || []))
+      .catch(() => {});
+  }, []);
+
+  const colors = { "Risque élevé": "#EF4444", "Risque moyen": "#F59E0B", "Risque faible": "#22C55E" };
+
   return (
     <Box sx={{ mt: 3 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography sx={{ color: "#EF4444", fontWeight: 600 }}>
-          Risque élevé
-        </Typography>
+      {riskData.map((item) => (
+        <Box
+          key={item.name}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            mb: 2,
+          }}
+        >
+          <Typography sx={{ color: colors[item.name] || "#fff", fontWeight: 600 }}>
+            {item.name}
+          </Typography>
 
-        <Typography sx={{ color: "#fff" }}>
-          18% (662)
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          mb: 2,
-        }}
-      >
-        <Typography sx={{ color: "#F59E0B", fontWeight: 600 }}>
-          Risque moyen
-        </Typography>
-
-        <Typography sx={{ color: "#fff" }}>
-          32% (1174)
-        </Typography>
-      </Box>
-
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Typography sx={{ color: "#22C55E", fontWeight: 600 }}>
-          Risque faible
-        </Typography>
-
-        <Typography sx={{ color: "#fff" }}>
-          50% (1836)
-        </Typography>
-      </Box>
+          <Typography sx={{ color: "#fff" }}>
+            {item.value}% ({item.count})
+          </Typography>
+        </Box>
+      ))}
     </Box>
   );
 }
