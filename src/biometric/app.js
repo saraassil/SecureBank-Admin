@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict';
 
 const MODEL_URL = 'https://cdn.jsdelivr.net/gh/justadudewhohacks/face-api.js@0.22.2/weights';

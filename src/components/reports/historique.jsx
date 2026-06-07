@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import Sidebar from "../../pages/Dashboard/Sidebar";
 import { useEffect, useState } from "react";
-import { useNotifications } from "../../../context/NotificationContext";
+import { useNotifications } from "../../context/NotificationContext";
 
 
 
@@ -22,11 +22,14 @@ const History = () => {
   const [historyData, setHistoryData] = useState([]);
 
   useEffect(() => {
+    const ac = new AbortController();
     const fetchHistory = async () => {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
-
+        if (!user?.id) { return; }
+        const id = setTimeout(() => ac.abort(), 8000);
         const res = await fetch("http://localhost:5000/history", {
+          signal: ac.signal,
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -35,9 +38,8 @@ const History = () => {
             user_id: user.id,
           }),
         });
-
+        clearTimeout(id);
         const data = await res.json();
-
 
         setHistoryData(data);
       } catch {
@@ -46,7 +48,9 @@ const History = () => {
     };
 
     fetchHistory();
-  }, []);
+
+    return () => ac.abort();
+  }, [showToast]);
 
 
   const cardStyle = {

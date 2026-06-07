@@ -1,5 +1,5 @@
 
-import { Box, Typography, TextField, Button, Checkbox, FormControlLabel, Paper, } from "@mui/material";
+import { Box, Typography, Button, Paper } from "@mui/material";
 
 import { motion } from "framer-motion";
 
@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 
-import Dashboard from "../Dashboard/Dashboard";
 import { useNotifications } from "../../context/NotificationContext";
 
 function Login() {
@@ -17,8 +16,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const [isRegister, setIsRegister] =
-    useState(false);
+  const isRegister = false;
   
   const handleLogin = async (e) => {
   e.preventDefault();
@@ -364,40 +362,5 @@ function Login() {
     </Box>
   );
 }
-
-const inputStyle = {
-  "& .MuiOutlinedInput-root": {
-    color: "#FFFFFF",
-
-    borderRadius: "14px",
-
-    background:
-      "rgba(255,255,255,0.03)",
-
-    transition: "0.3s",
-
-    "& fieldset": {
-      borderColor:
-        "rgba(255,255,255,0.08)",
-    },
-
-    "&:hover fieldset": {
-      borderColor: "#8B5CF6",
-    },
-
-    "&.Mui-focused fieldset": {
-      borderColor: "#8B5CF6",
-    },
-  },
-
-  "& input": {
-    color: "#FFFFFF",
-  },
-
-  "& .MuiInputBase-input::placeholder": {
-    color: "#64748B",
-    opacity: 1,
-  },
-};
 
 export default Login;

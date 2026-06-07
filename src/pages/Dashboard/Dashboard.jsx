@@ -1,6 +1,7 @@
 import {
   Box,
   Typography,
+  IconButton,
 } from "@mui/material";
 import {
   TextField,
@@ -14,17 +15,6 @@ import {
 } from "react";
 
 import { useNavigate } from "react-router-dom";
-import { IconButton } from "@mui/material";
-import InsertDriveFileOutlinedIcon from "@mui/icons-material/InsertDriveFileOutlined";
-
-import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-
-import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
-
-import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
-
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 import Sidebar from "./Sidebar";
@@ -35,7 +25,9 @@ function Dashboard() {
   const navigate = useNavigate();
 
   /* USER STATE */
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("user")); } catch { return null; }
+  });
 
   /* STATS STATE */
   const [stats, setStats] = useState([
@@ -72,22 +64,10 @@ function Dashboard() {
    const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    /* GET USER */
-    const savedUser = JSON.parse(
-      localStorage.getItem("user")
-    );
-
-    /* IF NO USER */
-    if (!savedUser) {
+    if (!user) {
       navigate("/");
-      return;
     }
-
-    setUser(savedUser);
-
-    /* DYNAMIC STATS */
-
-  }, [navigate]);
+  }, [user, navigate]);
 
   useEffect(() => {
     if (!user?.id || !user?.role) return;

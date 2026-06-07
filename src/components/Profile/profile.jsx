@@ -6,7 +6,6 @@ import {
   Button,
   TextField,
   Divider,
-  IconButton,
 } from "@mui/material";
 
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../pages/Dashboard/Sidebar";
 import { useNotifications } from "../../context/NotificationContext";
-import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 // ✅ REMOVED: unused `color` import from framer-motion
 
@@ -31,29 +29,22 @@ const textFieldSx = {
 
 const Profile = () => {
   const { showToast } = useNotifications();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("user")); } catch { return null; }
+  });
   const navigate = useNavigate();
 
-  const [firstname, setFirstname] = useState("");
-  const [lastname, setLastname] = useState("");
-  const [merchant_Name, setMerchantName] = useState("");
-  const [email, setEmail] = useState("");
-  const [city, setCity] = useState("");
+  const [firstname, setFirstname] = useState(user?.firstname || "");
+  const [lastname, setLastname] = useState(user?.lastname || "");
+  const [merchant_Name, setMerchantName] = useState(user?.merchantname || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [city, setCity] = useState(user?.city || "");
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    if (!savedUser) {
+    if (!user) {
       navigate("/");
-      return;
     }
-
-    setUser(savedUser);
-    setFirstname(savedUser.firstname || "");
-    setLastname(savedUser.lastname || "");
-    setMerchantName(savedUser.merchantname || "");
-    setEmail(savedUser.email || "");
-    setCity(savedUser.city || "");
-  }, [navigate]);
+  }, [user, navigate]);
 
   if (!user) return null;
 

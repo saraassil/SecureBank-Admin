@@ -21,63 +21,59 @@ const Notifications = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-
-  const fetchNotifications = async () => {
-    if (!user?.id || !user?.role) return;
-
-    try {
-      const url =
-        user.role === "Merchant"
-          ? "http://localhost:5000/merchant-notification"
-          : "http://localhost:5000/notification";
-
-      const payload =
-        user.role === "Merchant"
-          ? { merchant_id: user.id }
-          : { user_id: user.id };
-
-      const res = await axios.post(url, payload);
-
-      const data = res.data.map((t) => {
-        if (user.role === "Merchant") {
-          return {
-            id: t.id,
-            title: "Paiement reçu",
-            desc: `💰 ${t.amount} $ reçu de ${t.client}`,
-            time: t.date,
-            type: "success",
-          };
-        }
-
-        return {
-          id: t.id,
-          title: t.is_fraud
-            ? "Transaction suspecte détectée"
-            : "Paiement effectué",
-          desc: t.is_fraud
-            ? `⚠️ Fraude probable (${(t.prob * 100).toFixed(1)}%) - ${t.amount} $`
-            : `💳 Paiement de ${t.amount} $ à ${t.merchant}`,
-          time: t.date,
-          type: t.is_fraud ? "warning" : "success",
-        };
-      });
-
-      setNotifications(data);
-    } catch {
-      showToast("Erreur de chargement des notifications", "error");
-    } finally {
-      setLoading(false);
-    }
-  };
+  let parsed;
+  try { parsed = JSON.parse(localStorage.getItem("user")); } catch { parsed = null; }
+  const user = parsed || {};
 
   useEffect(() => {
-    fetchNotifications();
+    const fn = async () => {
+      if (!user?.id || !user?.role) { setLoading(false); return; }
+      try {
+        const url =
+          user.role === "Merchant"
+            ? "http://localhost:5000/merchant-notification"
+            : "http://localhost:5000/notification";
+        const payload =
+          user.role === "Merchant"
+            ? { merchant_id: user.id }
+            : { user_id: user.id };
+        const res = await axios.post(url, payload, { timeout: 8000 });
+        const data = res.data.map((t) => {
+          if (user.role === "Merchant") {
+            return {
+              id: t.id,
+              title: "Paiement reçu",
+              desc: `💰 ${t.amount} $ reçu de ${t.client}`,
+              time: t.date,
+              type: "success",
+            };
+          }
+          return {
+            id: t.id,
+            title: t.is_fraud
+              ? "Transaction suspecte détectée"
+              : "Paiement effectué",
+            desc: t.is_fraud
+              ? `⚠️ Fraude probable (${(t.prob * 100).toFixed(1)}%) - ${t.amount} $`
+              : `💳 Paiement de ${t.amount} $ à ${t.merchant}`,
+            time: t.date,
+            type: t.is_fraud ? "warning" : "success",
+          };
+        });
+        setNotifications(data);
+      } catch {
+        showToast("Erreur de chargement des notifications", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    const interval = setInterval(fetchNotifications, 5000);
+    fn();
+
+    const interval = setInterval(fn, 5000);
 
     return () => clearInterval(interval);
-  }, [user?.id, user?.role]);
+  }, [user?.id, user?.role, showToast]);
 
   const cardStyle = {
     background: "rgba(255,255,255,.03)",

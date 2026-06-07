@@ -42,6 +42,7 @@ function IDVerify() {
   const selfieDescRef = useRef(null);
   const idDescRef = useRef(null);
   const runDetectionRef = useRef(null);
+  const cameraActiveRef = useRef(false);
 
   // ── Load face-api models ──────────────────────────────────────
   useEffect(() => {
@@ -68,39 +69,40 @@ function IDVerify() {
 
   // ── Face detection loop ──────────────────────────────────────
   const runDetection = useCallback(async () => {
-    if (!cameraOn) return;
+    if (!cameraActiveRef.current) return;
     const vid = videoRef.current;
     if (!vid || !vid.videoWidth) { rafRef.current = requestAnimationFrame(runDetectionRef.current); return; }
-    const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.45 });
-    const dets = await faceapi
-      .detectAllFaces(vid, opts)
-      .withFaceLandmarks(true);
-    const ctx = canvasRef.current?.getContext("2d");
-    if (ctx) {
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-    }
-    setFaceCount(dets.length);
-    if (dets.length === 1) {
-      setSelfieBadge({ type: "ok", text: "✓ Visage centré" });
+    if (!faceapi) { rafRef.current = requestAnimationFrame(runDetectionRef.current); return; }
+    try {
+      const opts = new faceapi.TinyFaceDetectorOptions({ inputSize: 320, scoreThreshold: 0.45 });
+      const dets = await faceapi
+        .detectAllFaces(vid, opts)
+        .withFaceLandmarks(true);
+      const ctx = canvasRef.current?.getContext("2d");
       if (ctx) {
-        const r = faceapi.resizeResults(dets, { width: vid.videoWidth, height: vid.videoHeight });
-        ctx.strokeStyle = "#E2001A";
-        ctx.lineWidth = 2;
-        const { x, y, width, height } = r[0].detection.box;
-        ctx.strokeRect(x, y, width, height);
-        faceapi.draw.drawFaceLandmarks(canvasRef.current, r);
+        ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       }
-    } else if (dets.length > 1) {
-      setSelfieBadge({ type: "warn", text: `${dets.length} visages détectés` });
-    } else {
-      setSelfieBadge({ type: "err", text: "Aucun visage détecté" });
-    }
+      setFaceCount(dets.length);
+      if (dets.length === 1) {
+        setSelfieBadge({ type: "ok", text: "✓ Visage centré" });
+        if (ctx) {
+          const r = faceapi.resizeResults(dets, { width: vid.videoWidth, height: vid.videoHeight });
+          ctx.strokeStyle = "#8B5CF6";
+          ctx.lineWidth = 2;
+          const { x, y, width, height } = r[0].detection.box;
+          ctx.strokeRect(x, y, width, height);
+          faceapi.draw.drawFaceLandmarks(canvasRef.current, r);
+        }
+      } else if (dets.length > 1) {
+        setSelfieBadge({ type: "warn", text: `${dets.length} visages détectés` });
+      } else {
+        setSelfieBadge({ type: "err", text: "Aucun visage détecté" });
+      }
+    } catch { /* detection errors silently continue the loop */ }
     rafRef.current = requestAnimationFrame(runDetectionRef.current);
-  }, [cameraOn]);
+  }, []);
 
   useEffect(() => { runDetectionRef.current = runDetection; }, [runDetection]);
-
-  useEffect(() => { if (cameraOn) runDetection(); }, [cameraOn, runDetection]);
 
   // ── Camera ────────────────────────────────────────────────────
   const startCamera = useCallback(async () => {
@@ -113,8 +115,10 @@ function IDVerify() {
       streamRef.current = stream;
       vid.onloadedmetadata = () => {
         vid.play();
+        cameraActiveRef.current = true;
         setCameraOn(true);
         setSelfieBadge({ type: "", text: "Caméra active..." });
+        runDetectionRef.current();
       };
     } catch {
       showToast("Accès à la caméra refusé", "error");
@@ -122,6 +126,7 @@ function IDVerify() {
   }, [showToast]);
 
   const stopCamera = useCallback(() => {
+    cameraActiveRef.current = false;
     setCameraOn(false);
     cancelAnimationFrame(rafRef.current);
     (streamRef.current?.getTracks() ?? []).forEach((t) => t.stop());
@@ -267,7 +272,7 @@ function IDVerify() {
                   value={benef} onChange={(e) => setBenef(e.target.value)} />
               </div>
             </div>
-            <button className="idv-btn idv-btn-red" onClick={goToStep2}>
+            <button className="idv-btn idv-btn-primary" onClick={goToStep2}>
               Continuer — Vérification sécurisée &nbsp;→
             </button>
             <p className="idv-sec-note">🔒 &nbsp;Connexion chiffrée · Données non transmises</p>
@@ -319,11 +324,11 @@ function IDVerify() {
             {!selfieDone ? (
               <>
                 {!cameraOn ? (
-                  <button className="idv-btn idv-btn-red" disabled={!aiLoaded} onClick={startCamera}>
+                  <button className="idv-btn idv-btn-primary" disabled={!aiLoaded} onClick={startCamera}>
                     Démarrer la caméra
                   </button>
                 ) : (
-                  <button className="idv-btn idv-btn-green" onClick={handleCapture} disabled={faceCount !== 1 || capturing}>
+                  <button className="idv-btn idv-btn-success" onClick={handleCapture} disabled={faceCount !== 1 || capturing}>
                     {capturing ? <><span className="idv-spin" />&nbsp;Analyse...</> : "📸  Capturer"}
                   </button>
                 )}
@@ -403,11 +408,11 @@ function IDVerify() {
             <div className={`idv-result-verdict${resultOk ? " ok" : " fraud"}`}>
               {resultOk ? "Transaction validée" : "Transaction bloquée"}
             </div>
-            <div className="idv-result-msg">
-              {resultOk
+            <div className="idv-result-msg" dangerouslySetInnerHTML={{
+              __html: resultOk
                 ? "Votre identité a été vérifiée avec succès. La transaction a été <strong>autorisée</strong>."
-                : "Votre identité ne correspond pas au document fourni. La transaction a été <strong>annulée</strong> pour des raisons de sécurité."}
-            </div>
+                : "Votre identité ne correspond pas au document fourni. La transaction a été <strong>annulée</strong> pour des raisons de sécurité.",
+            }} />
             <div className={`idv-result-card${!resultOk ? " fraud" : ""}`}>
               <div className="idv-rrow">
                 <span className="idv-rlbl">Montant</span>
@@ -436,7 +441,7 @@ function IDVerify() {
                 </div>
               )}
             </div>
-            <button className="idv-btn idv-btn-red" style={{ maxWidth: 320 }} onClick={() => window.location.reload()}>
+            <button className="idv-btn idv-btn-primary" style={{ maxWidth: 320 }} onClick={() => window.location.reload()}>
               {resultOk ? "Retour à l'accueil" : "Réessayer"}
             </button>
             {!resultOk && (
