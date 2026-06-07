@@ -15,10 +15,13 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import VerifiedUserOutlinedIcon from "@mui/icons-material/VerifiedUserOutlined";
+import { useNotifications } from "../../context/NotificationContext";
 
 import logo from "../../assets/images/logo.png";
 
 function Sidebar() {
+  const { showToast } = useNotifications();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -32,8 +35,8 @@ function Sidebar() {
 
       localStorage.removeItem("user");
       navigate("/");
-    } catch (err) {
-      console.error("Logout error:", err);
+    } catch {
+      showToast("Erreur lors de la déconnexion", "error");
     }
   };
 
@@ -54,6 +57,12 @@ function Sidebar() {
       label: "Currency Converter",
       icon:  <CurrencyExchangeIcon />,
       path: "/analyses",
+    },
+
+    {
+      label: "ID Verify",
+      icon: <VerifiedUserOutlinedIcon />,
+      path: "/id-verify",
     },
 
     {

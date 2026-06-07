@@ -2,9 +2,11 @@ import { Button, Paper, TextField, Typography, Box, MenuItem } from "@mui/materi
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useNotifications } from "../../context/NotificationContext";
 
 
 function Signup() {
+  const { showToast } = useNotifications();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -56,14 +58,14 @@ function Signup() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data);
         localStorage.setItem("user", JSON.stringify(data));
+        showToast("Inscription réussie", "success");
         navigate("/dashboard");
       } else {
-        alert(data.message);
+        showToast(data.message || "Erreur d'inscription", "error");
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("Erreur de connexion au serveur", "error");
     }
   };
 

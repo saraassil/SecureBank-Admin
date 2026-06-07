@@ -8,8 +8,10 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 import Sidebar from "../../pages/Dashboard/Sidebar";
+import { useNotifications } from "../../context/NotificationContext";
 
 function Documents() {
+  const { showToast } = useNotifications();
   const fileInputRef = useRef(null);
   const [file, setFile] = useState(null);
 
@@ -40,9 +42,13 @@ function Documents() {
       });
 
       const data = await response.json();
-      console.log("Server response:", data);
-    } catch (error) {
-      console.error("Upload error:", error);
+      if (response.ok) {
+        showToast("Document uploadé avec succès", "success");
+      } else {
+        showToast(data.error || "Erreur upload", "error");
+      }
+    } catch {
+      showToast("Erreur de connexion au serveur", "error");
     }
   };
 

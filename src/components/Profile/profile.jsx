@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Sidebar from "../../pages/Dashboard/Sidebar";
+import { useNotifications } from "../../context/NotificationContext";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 
 // ✅ REMOVED: unused `color` import from framer-motion
@@ -29,6 +30,7 @@ const textFieldSx = {
 };
 
 const Profile = () => {
+  const { showToast } = useNotifications();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
@@ -40,7 +42,6 @@ const Profile = () => {
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("USER FROM STORAGE:", savedUser);
     if (!savedUser) {
       navigate("/");
       return;
@@ -97,19 +98,17 @@ const Profile = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert("Profil mis à jour");
-
+        showToast("Profil mis à jour", "success");
 
         const updatedUser = { ...user, ...payload };
         setUser(updatedUser);
         localStorage.setItem("user", JSON.stringify(updatedUser));
         
       } else {
-        alert(data.error || data.message);
+        showToast(data.error || data.message || "Erreur", "error");
       }
-    } catch (err) {
-      console.error(err);
-      alert("Une erreur est survenue. Veuillez réessayer.");
+    } catch {
+      showToast("Erreur de connexion au serveur", "error");
     }
   };
 

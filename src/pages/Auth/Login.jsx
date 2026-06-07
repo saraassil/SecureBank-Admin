@@ -8,8 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 import Dashboard from "../Dashboard/Dashboard";
+import { useNotifications } from "../../context/NotificationContext";
 
 function Login() {
+  const { showToast } = useNotifications();
   const navigate = useNavigate();
   const [role, setRole] = useState("Client");
   const [email, setEmail] = useState("");
@@ -38,16 +40,15 @@ function Login() {
     const data = await response.json();
 
     if (response.ok) {
-      console.log(data);
       localStorage.setItem("user", JSON.stringify(data))
+      showToast(`Connecté en tant que ${role}`, "success");
       navigate("/dashboard");
       
     } else {
-      alert(data.error);
+      showToast(data.error || "Identifiants invalides", "error");
     }
-  } catch (error) {
-    console.error(error);
-    alert("Server error");
+  } catch {
+    showToast("Erreur de connexion au serveur", "error");
   }
 };
   const inputStyle = {

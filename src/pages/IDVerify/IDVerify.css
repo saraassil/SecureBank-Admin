@@ -1,0 +1,361 @@
+.idv-app {
+  --red: #E2001A;
+  --red-dark: #C0001A;
+  --red-light: #FFF1F2;
+  --green: #00A651;
+  --green-light: #F0FFF8;
+  --text: #1C1C1E;
+  --text2: #6C6C70;
+  --text3: #AEAEB2;
+  --bg: #F2F2F7;
+  --card: #FFFFFF;
+  --border: #E5E5EA;
+  --radius: 14px;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.07), 0 0 1px rgba(0, 0, 0, 0.06);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* ── Screens ─────────────────────────────── */
+.idv-screen {
+  display: none;
+  flex-direction: column;
+  min-height: 100vh;
+  animation: idvFadeUp 0.3s ease;
+}
+.idv-screen.active { display: flex; }
+@keyframes idvFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Header ──────────────────────────────── */
+.idv-hd {
+  background: var(--red);
+  padding: 52px 20px 20px;
+  flex-shrink: 0;
+}
+.idv-hd-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.idv-back-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.idv-back-btn:hover { background: rgba(255, 255, 255, 0.3); }
+.idv-brand { display: flex; align-items: center; gap: 9px; }
+.idv-brand-mark {
+  width: 30px; height: 22px;
+  position: relative; flex-shrink: 0;
+}
+.idv-brand-mark span {
+  position: absolute; display: block;
+  height: 7px; background: rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+}
+.idv-brand-mark span:nth-child(1) { width: 100%; top: 0; }
+.idv-brand-mark span:nth-child(2) { width: 70%; top: 50%; transform: translateY(-50%); }
+.idv-brand-mark span:nth-child(3) { width: 45%; bottom: 0; }
+.idv-brand-name { font-size: 0.88rem; font-weight: 700; color: #fff; letter-spacing: -0.01em; }
+.idv-brand-sub { font-size: 0.62rem; color: rgba(255, 255, 255, 0.7); margin-top: 2px; }
+.idv-hd-title { font-size: 1.15rem; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+.idv-hd-step { font-size: 0.72rem; font-weight: 500; color: rgba(255, 255, 255, 0.7); margin-top: 3px; }
+.idv-progress { display: flex; gap: 5px; margin-top: 14px; }
+.idv-progress span {
+  height: 3px; flex: 1; border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  transition: background 0.4s;
+}
+.idv-progress span.done { background: rgba(255, 255, 255, 0.65); }
+.idv-progress span.active { background: #fff; }
+
+/* ── Content ─────────────────────────────── */
+.idv-cnt {
+  flex: 1; padding: 24px 18px 36px;
+  overflow-y: auto;
+}
+.idv-sec-title {
+  font-size: 1.2rem; font-weight: 800;
+  letter-spacing: -0.025em; margin-bottom: 4px;
+}
+.idv-sec-sub {
+  font-size: 0.83rem; color: var(--text2);
+  line-height: 1.55; margin-bottom: 22px;
+}
+.idv-sec-note {
+  text-align: center; font-size: 0.7rem;
+  color: var(--text3); margin-top: 14px;
+}
+
+/* ── TX Grid ─────────────────────────────── */
+.idv-tx-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 22px;
+}
+.idv-tx-btn {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 13px; padding: 15px 12px;
+  cursor: pointer; text-align: left;
+  display: flex; flex-direction: column; gap: 8px;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.idv-tx-btn:active { transform: scale(0.97); }
+.idv-tx-btn.sel { border-color: var(--red); background: var(--red-light); }
+.idv-tx-icon { font-size: 1.35rem; }
+.idv-tx-label { font-size: 0.82rem; font-weight: 700; }
+
+/* ── Fields ──────────────────────────────── */
+.idv-field { margin-bottom: 14px; }
+.idv-field-lbl {
+  font-size: 0.72rem; font-weight: 700; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 7px;
+}
+.idv-field-box {
+  background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 12px; display: flex; align-items: center;
+  padding: 14px 16px; gap: 10px; box-shadow: var(--shadow);
+  transition: border-color 0.2s;
+}
+.idv-field-box:focus-within { border-color: var(--red); }
+.idv-field-box input {
+  flex: 1; border: none; outline: none;
+  font-size: 1rem; font-weight: 600;
+  font-family: inherit; background: transparent;
+}
+.idv-field-box input::placeholder { color: var(--text3); font-weight: 400; }
+.idv-field-unit { font-size: 0.83rem; font-weight: 700; color: var(--text2); }
+
+/* ── Buttons ─────────────────────────────── */
+.idv-btn {
+  width: 100%; border: none; border-radius: 13px;
+  padding: 16px; font-size: 0.92rem; font-weight: 700;
+  font-family: inherit; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; letter-spacing: -0.01em;
+  transition: all 0.2s;
+}
+.idv-btn + .idv-btn { margin-top: 10px; }
+.idv-btn-red {
+  background: var(--red); color: #fff;
+  box-shadow: 0 4px 16px rgba(226, 0, 26, 0.28);
+  margin-top: 8px;
+}
+.idv-btn-red:hover:not(:disabled) { background: var(--red-dark); transform: translateY(-1px); }
+.idv-btn-red:active:not(:disabled) { transform: scale(0.98); }
+.idv-btn-red:disabled { background: #C8C8CC; box-shadow: none; cursor: default; transform: none; }
+.idv-btn-green {
+  background: var(--green); color: #fff;
+  box-shadow: 0 4px 16px rgba(0, 166, 81, 0.25);
+}
+.idv-btn-green:hover:not(:disabled) { filter: brightness(1.05); transform: translateY(-1px); }
+.idv-btn-green:disabled { background: #C8C8CC; box-shadow: none; cursor: default; transform: none; }
+.idv-btn-outline {
+  background: var(--card); color: var(--red);
+  border: 1.5px solid var(--red); box-shadow: var(--shadow);
+}
+.idv-btn-outline:hover { background: var(--red-light); }
+
+/* ── Camera ──────────────────────────────── */
+.idv-cam-wrap {
+  width: 100%; aspect-ratio: 4/3;
+  background: #111; border-radius: 16px;
+  overflow: hidden; position: relative; margin-bottom: 14px;
+}
+.idv-cam-wrap video {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+.idv-cam-wrap canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 2;
+}
+.idv-oval-guide {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -52%);
+  width: 54%; aspect-ratio: 0.76;
+  border: 2px solid rgba(226, 0, 26, 0.55);
+  border-radius: 50%; pointer-events: none; z-index: 3;
+  transition: border-color 0.35s, box-shadow 0.35s;
+}
+.idv-oval-guide.ok { border-color: var(--green); box-shadow: inset 0 0 24px rgba(0, 166, 81, 0.15); }
+.idv-oval-guide.bad { border-color: var(--red); }
+.idv-scan-line {
+  position: absolute; left: 0; width: 100%; height: 1.5px; top: 15%;
+  background: linear-gradient(90deg, transparent, rgba(226, 0, 26, 0) 8%, rgba(226, 0, 26, 0.85) 50%, rgba(226, 0, 26, 0) 92%, transparent);
+  box-shadow: 0 0 10px rgba(226, 0, 26, 0.5);
+  z-index: 4; pointer-events: none; opacity: 0;
+}
+.idv-cam-wrap.scanning .idv-scan-line {
+  animation: idvScanMove 2.8s ease-in-out infinite;
+}
+@keyframes idvScanMove {
+  0% { top: 10%; opacity: 0; }
+  7% { opacity: 1; }
+  93% { opacity: 1; }
+  100% { top: 87%; opacity: 0; }
+}
+.idv-cam-corners { position: absolute; inset: 10px; z-index: 5; pointer-events: none; }
+.idv-cam-corners em {
+  position: absolute; width: 16px; height: 16px;
+  border-color: rgba(226, 0, 26, 0.6);
+  border-style: solid; transition: border-color 0.3s;
+}
+.idv-cam-wrap.scanning .idv-cam-corners em { border-color: var(--red); }
+.idv-cam-corners em:nth-child(1) { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.idv-cam-corners em:nth-child(2) { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.idv-cam-corners em:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.idv-cam-corners em:nth-child(4) { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+.idv-cam-hint-lbl {
+  position: absolute; bottom: 12px; left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.62); color: #fff;
+  font-size: 0.73rem; font-weight: 600;
+  padding: 5px 15px; border-radius: 20px;
+  z-index: 6; white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+#idv-selfie-preview {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block; z-index: 8;
+}
+
+/* ── Status badge ────────────────────────── */
+.idv-status-row {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 14px;
+}
+.idv-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.73rem; font-weight: 600;
+  padding: 5px 12px; border-radius: 20px;
+  background: var(--bg); color: var(--text2);
+  transition: all 0.25s;
+}
+.idv-badge.ok { background: #E6F7EE; color: var(--green); }
+.idv-badge.err { background: #FFF1F2; color: var(--red); }
+.idv-badge.warn { background: #FFF7E6; color: #F59E0B; }
+.idv-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.idv-face-lbl { font-size: 0.7rem; color: var(--text2); }
+
+/* ── ID Upload ───────────────────────────── */
+.idv-id-zone {
+  width: 100%; aspect-ratio: 16/10;
+  border: 2px dashed var(--border); border-radius: 16px;
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 9px; cursor: pointer;
+  background: #FAFAFA; position: relative;
+  overflow: hidden; margin-bottom: 14px;
+  transition: border-color 0.2s, background 0.2s;
+}
+.idv-id-zone:hover,
+.idv-id-zone.drag { border-color: var(--red); background: var(--red-light); }
+.idv-id-zone img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+#idv-id-placeholder {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px; pointer-events: none;
+}
+.idv-id-ico { font-size: 2rem; }
+.idv-id-lbl { font-size: 0.88rem; font-weight: 700; }
+.idv-id-sub { font-size: 0.74rem; color: var(--text2); }
+.idv-id-fmt { font-size: 0.65rem; color: var(--text3); }
+#idv-id-file { display: none; }
+#idv-btn-clr {
+  font-size: 0.73rem; font-weight: 600; color: var(--red);
+  background: none; border: none; cursor: pointer; font-family: inherit;
+}
+
+/* ── AI badge ────────────────────────────── */
+#idv-ai-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: #FFF7E6; border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 0.78rem; font-weight: 500; color: #92400E;
+  margin-bottom: 16px;
+}
+
+/* ── Result ──────────────────────────────── */
+.idv-result-body {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 36px 20px 48px; text-align: center;
+}
+.idv-result-circle {
+  width: 104px; height: 104px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 3rem; margin-bottom: 24px;
+  animation: idvPopIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes idvPopIn {
+  from { transform: scale(0.5); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.idv-result-circle.ok { background: var(--green-light); }
+.idv-result-circle.fraud { background: var(--red-light); }
+.idv-result-verdict {
+  font-size: 1.45rem; font-weight: 800;
+  letter-spacing: -0.03em; margin-bottom: 6px;
+}
+.idv-result-verdict.ok { color: var(--green); }
+.idv-result-verdict.fraud { color: var(--red); }
+.idv-result-msg {
+  font-size: 0.88rem; color: var(--text2);
+  line-height: 1.6; margin-bottom: 28px; max-width: 290px;
+}
+.idv-result-card {
+  width: 100%; background: var(--card);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 4px 20px; margin-bottom: 28px; text-align: left;
+}
+.idv-result-card.fraud { border-left: 3px solid var(--red); }
+.idv-rrow {
+  display: flex; align-items: center;
+  justify-content: space-between; padding: 13px 0;
+}
+.idv-rrow + .idv-rrow { border-top: 1px solid var(--border); }
+.idv-rlbl { font-size: 0.75rem; color: var(--text2); font-weight: 500; }
+.idv-rval { font-size: 0.88rem; font-weight: 700; }
+.idv-rval.amount { font-size: 1.1rem; color: var(--green); }
+.idv-rval.blocked { color: var(--red); }
+.idv-rval.ref { font-size: 0.78rem; color: var(--text2); }
+.idv-fraud-note {
+  font-size: 0.72rem; color: var(--text2);
+  max-width: 280px; margin-top: 14px; line-height: 1.5;
+}
+
+/* ── Spinners ────────────────────────────── */
+.idv-spin {
+  width: 16px; height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff; border-radius: 50%;
+  animation: idvSpin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+.idv-spin-amber {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  border-top-color: #F59E0B; border-radius: 50%;
+  animation: idvSpin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+@keyframes idvSpin { to { transform: rotate(360deg); } }

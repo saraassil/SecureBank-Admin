@@ -175,8 +175,13 @@ Tous les mots de passe sont : **`123456`**
 ## Démarrage rapide
 
 ```bash
+# Tout en un
+chmod +x start.sh
+./start.sh
+
+# Ou manuellement :
 # 1. MySQL (Docker)
-docker run -d --name mysql-fraud \
+docker start mysql-backend 2>/dev/null || docker run -d --name mysql-backend \
   -e MYSQL_ROOT_PASSWORD=root \
   -e MYSQL_DATABASE=flaskdb \
   -e MYSQL_USER=user2 \
@@ -185,15 +190,37 @@ docker run -d --name mysql-fraud \
 
 # 2. Backend
 cd backend
-venv/bin/pip install -r requirements.txt   # ou utiliser le venv existant
-venv/bin/python seed.py                    # reset + seed DB
-venv/bin/python run.py                     # → localhost:5000
+cp .env.example .env          # éditer avec vos identifiants SMTP
+venv/bin/pip install -r requirements.txt 2>/dev/null || true
+venv/bin/python seed.py       # reset + seed DB
+venv/bin/python run.py        # → http://127.0.0.1:5000
 
 # 3. Frontend
 cd ..
 npm install
-npm run dev                                # → localhost:5173
+npm run dev                   # → http://localhost:5173
 ```
+
+## Configuration
+
+| Fichier | Variables |
+|---------|-----------|
+| `backend/.env` | `API_KEY` (freecurrencyapi), `MAIL_USERNAME`/`MAIL_PASSWORD` (Gmail SMTP) |
+| `.env` (racine) | `VITE_API_URL=http://localhost:5000` |
+
+Pour recevoir les notifications email de fraude, remplissez les vars SMTP Gmail dans `backend/.env` :
+```
+MAIL_USERNAME=votre.email@gmail.com
+MAIL_PASSWORD=xxxx xxxx xxxx xxxx    # mot de passe d'application
+```
+
+## Real-time notifications (Socket.IO)
+
+Le backend émet des événements en direct :
+- `new_alert` — dès qu'une transaction frauduleuse est détectée (toast + email)
+- `alert_resolved` — quand une alerte est résolue
+
+L'icône de cloche dans l'AdminHeader et les toasts sont mis à jour automatiquement via Socket.IO.
 
 ## Admin UI
 

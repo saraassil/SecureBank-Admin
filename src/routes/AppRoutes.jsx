@@ -22,36 +22,42 @@ import AnalysesPage from "../pages/AnalysesPage";
 import DocumentsPage from "../pages/DocumentsPage";
 import SettingsPage from "../pages/SettingsPage";
 import ProfileAdmin from "../pages/ProfileAdmin";
+import IDVerify from "../pages/IDVerify/IDVerify";
+
+import { NotificationProvider } from "../context/NotificationContext";
 
 function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/loginadmin" element={<Loginadmin />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/documents" element={<Documents />} />
-        <Route path="/analyses" element={<Analyses />} />
-        <Route path="/historique" element={<Historique />} />
-        <Route path="/notifications" element={<Notifications />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/parametres" element={<Parametres />} />
+    <NotificationProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/loginadmin" element={<Loginadmin />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/documents" element={<Documents />} />
+          <Route path="/analyses" element={<Analyses />} />
+          <Route path="/historique" element={<Historique />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/parametres" element={<Parametres />} />
+        <Route path="/id-verify" element={<IDVerify />} />
 
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/users" element={<UsersPage />} />
-        <Route path="/admin/reports" element={<ReportsPage />} />
-        <Route path="/admin/alerts" element={<AlertsPage />} />
-        <Route path="/admin/analyses" element={<AnalysesPage />} />
-        <Route path="/admin/documents" element={<DocumentsPage />} />
-        <Route path="/admin/settings" element={<SettingsPage />} />
-        <Route path="/admin/profile" element={<ProfileAdmin />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<UsersPage />} />
+          <Route path="/admin/reports" element={<ReportsPage />} />
+          <Route path="/admin/alerts" element={<AlertsPage />} />
+          <Route path="/admin/analyses" element={<AnalysesPage />} />
+          <Route path="/admin/documents" element={<DocumentsPage />} />
+          <Route path="/admin/settings" element={<SettingsPage />} />
+          <Route path="/admin/profile" element={<ProfileAdmin />} />
+        </Routes>
+      </BrowserRouter>
+    </NotificationProvider>
   );
 }
 

@@ -11,15 +11,15 @@ import Sidebar from "../../pages/Dashboard/Sidebar";
 import {
   useNavigate,
 } from "react-router-dom";
+import { useNotifications } from "../../context/NotificationContext";
 
 
 const Settings = () => {
-
+  const { showToast } = useNotifications();
   const navigate = useNavigate();
 
     const handleDelete = async () => {
     const user = JSON.parse(localStorage.getItem("user")); 
-    console.log(user)
     try {
       const res = await fetch(`http://localhost:5000/delete/${user.id}`, {
         method: "DELETE",
@@ -28,14 +28,13 @@ const Settings = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert(data.message);
-        // redirect or logout
+        showToast(data.message || "Compte supprimé", "success");
         navigate("/login");
       } else {
-        alert(data.error || "Erreur");
+        showToast(data.error || "Erreur", "error");
       }
-    } catch (err) {
-      console.error(err);
+    } catch {
+      showToast("Erreur de connexion au serveur", "error");
     }
   };
 

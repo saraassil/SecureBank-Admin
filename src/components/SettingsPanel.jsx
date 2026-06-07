@@ -3,10 +3,12 @@ import {
   Paper, Typography, Box, Switch, Divider, Button, Dialog, DialogTitle,
   DialogContent, DialogActions, TextField, Snackbar, Alert,
 } from "@mui/material";
+import { useNotifications } from "../context/NotificationContext";
 
 const API = "http://localhost:5000";
 
 function SettingsPanel() {
+  const { showToast } = useNotifications();
   const [settings, setSettings] = useState({ two_factor: true, email_notifications: true, push_notifications: false });
   const [pwOpen, setPwOpen] = useState(false);
   const [pwForm, setPwForm] = useState({ old: "", new: "" });
@@ -29,7 +31,7 @@ function SettingsPanel() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });
-    } catch { console.warn("Settings update failed"); }
+    } catch { showToast("Échec de la mise à jour", "warning"); }
   };
 
   const handleChangePassword = async (e) => {

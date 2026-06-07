@@ -12,10 +12,12 @@ import {
 } from "@mui/material";
 import Sidebar from "../../pages/Dashboard/Sidebar";
 import { useEffect, useState } from "react";
+import { useNotifications } from "../../../context/NotificationContext";
 
 
 
 const History = () => {
+  const { showToast } = useNotifications();
   // Exemple de données - Vous pouvez remplacer cela par un appel API
   const [historyData, setHistoryData] = useState([]);
 
@@ -23,8 +25,6 @@ const History = () => {
     const fetchHistory = async () => {
       try {
         const user = JSON.parse(localStorage.getItem("user"));
-        console.log("USER:", user);
-        console.log("USER ID:", user?.id);
 
         const res = await fetch("http://localhost:5000/history", {
           method: "POST",
@@ -40,8 +40,8 @@ const History = () => {
 
 
         setHistoryData(data);
-      } catch (err) {
-        console.error(err);
+      } catch {
+        showToast("Erreur de chargement de l'historique", "error");
       }
     };
 

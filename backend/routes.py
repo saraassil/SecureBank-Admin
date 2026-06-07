@@ -669,17 +669,21 @@ def register_routes(app,db,bcrypt,socketio,mail):
         base = request.args.get("base")
         currency = request.args.get("currency")
 
-        url = (
-            f"https://api.freecurrencyapi.com/v1/latest"
-            f"?apikey={API_KEY}"
-            f"&base_currency={base}"
-            f"&currencies={currency}"
-        )
+        try:
+            url = (
+                f"https://api.freecurrencyapi.com/v1/latest"
+                f"?apikey={API_KEY}"
+                f"&base_currency={base}"
+                f"&currencies={currency}"
+            )
 
-        response = requests.get(url)
-        data = response.json()
-
-        return jsonify(data)
+            response = requests.get(url, timeout=10)
+            data = response.json()
+            if "data" not in data or currency not in data.get("data", {}):
+                return jsonify({"error": data.get("message", "Conversion service unavailable")}), 502
+            return jsonify(data)
+        except Exception:
+            return jsonify({"error": "Conversion service unavailable"}), 502
 
     @app.route("/calculate")
     def calculate():
@@ -687,22 +691,26 @@ def register_routes(app,db,bcrypt,socketio,mail):
         currency = request.args.get("currency")
         amount = float(request.args.get("amount", 0))
 
-        url = (
-            f"https://api.freecurrencyapi.com/v1/latest"
-            f"?apikey={API_KEY}"
-            f"&base_currency={base}"
-            f"&currencies={currency}"
-        )
+        try:
+            url = (
+                f"https://api.freecurrencyapi.com/v1/latest"
+                f"?apikey={API_KEY}"
+                f"&base_currency={base}"
+                f"&currencies={currency}"
+            )
 
-        response = requests.get(url)
-        data = response.json()
+            response = requests.get(url, timeout=10)
+            data = response.json()
+            if "data" not in data or currency not in data.get("data", {}):
+                return jsonify({"error": data.get("message", "Conversion service unavailable")}), 502
+            rate = list(data["data"].values())[0]
 
-        rate = list(data["data"].values())[0]
-
-        return jsonify({
-            "amount": amount,
-            "result": amount * rate
-        })
+            return jsonify({
+                "amount": amount,
+                "result": amount * rate
+            })
+        except Exception:
+            return jsonify({"error": "Calculation service unavailable"}), 502
 
     @app.route("/admin/stats", methods=["GET"])
     def admin_stats():

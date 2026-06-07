@@ -10,7 +10,7 @@ export function NotificationProvider({ children }) {
   const [toast, setToast] = useState({ open: false, message: "", severity: "info" });
 
   useEffect(() => {
-    const socket = io(SOCKET_URL);
+    const socket = io(SOCKET_URL, { transports: ["polling", "websocket"] });
 
     socket.on("new_alert", (data) => {
       setAlerts((prev) => [data, ...prev]);
@@ -36,8 +36,12 @@ export function NotificationProvider({ children }) {
 
   const clearToast = useCallback(() => setToast((prev) => ({ ...prev, open: false })), []);
 
+  const showToast = useCallback((message, severity = "info") => {
+    setToast({ open: true, message, severity });
+  }, []);
+
   return (
-    <NotificationContext.Provider value={{ alerts, alertCount: alerts.length }}>
+    <NotificationContext.Provider value={{ alerts, alertCount: alerts.length, showToast }}>
       {children}
       <Snackbar open={toast.open} autoHideDuration={5000} onClose={clearToast}
         anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
@@ -50,6 +54,7 @@ export function NotificationProvider({ children }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useNotifications() {
   return useContext(NotificationContext);
 }

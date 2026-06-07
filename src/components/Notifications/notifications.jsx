@@ -10,12 +10,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Sidebar from "../../pages/Dashboard/Sidebar";
+import { useNotifications } from "../../context/NotificationContext";
 
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningIcon from "@mui/icons-material/Warning";
 import InfoIcon from "@mui/icons-material/Info";
 
 const Notifications = () => {
+  const { showToast } = useNotifications();
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -62,8 +64,8 @@ const Notifications = () => {
       });
 
       setNotifications(data);
-    } catch (err) {
-      console.error(err);
+    } catch {
+      showToast("Erreur de chargement des notifications", "error");
     } finally {
       setLoading(false);
     }

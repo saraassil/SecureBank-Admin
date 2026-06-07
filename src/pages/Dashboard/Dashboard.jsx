@@ -28,8 +28,10 @@ import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDown
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 import Sidebar from "./Sidebar";
+import { useNotifications } from "../../context/NotificationContext";
 
 function Dashboard() {
+  const { showToast } = useNotifications();
   const navigate = useNavigate();
 
   /* USER STATE */
@@ -82,7 +84,6 @@ function Dashboard() {
     }
 
     setUser(savedUser);
-    console.log(savedUser);
 
     /* DYNAMIC STATS */
 
@@ -188,15 +189,15 @@ function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);
+        showToast(data.message, "success");
 
         setAmount("");
         setMerchantCode("");
       } else {
-        alert(data.error);
+        showToast(data.error || "Erreur", "error");
       }
-    } catch (error) {
-      console.error(error);
+    } catch {
+      showToast("Erreur réseau", "error");
     }finally {
       setLoading(false);
     }
